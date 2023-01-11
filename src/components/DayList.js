@@ -1,7 +1,10 @@
 import React from 'react';
 import DayListItem from './DayListItem';
 
+
+// Day list component function
 export default function DayList(props) {
+
   // Function for handling parsing the days
   const daysParser = function() {
       return props.days.map((weekday) => {

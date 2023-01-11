@@ -2,11 +2,11 @@ import React from 'react';
 import DayListItem from './DayListItem';
 
 export default function DayList(props) {
-  console.log(props);
+  // Function for handling parsing the days
   const daysParser = function() {
-
       return props.days.map((weekday) => {
-        console.log(`Current weekday is `, weekday);
+
+        // must return either HTML or a COMPONENT. In this case, returns a Component.
         return(
         <DayListItem 
         key={weekday.id}
@@ -21,7 +21,6 @@ export default function DayList(props) {
   return (
     <ul>
       {daysParser()}
-      
     </ul>
   )
 }

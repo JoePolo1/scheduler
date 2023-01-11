@@ -16,7 +16,7 @@ export default function DayListItem(props)  {
     };
   };
 
-
+  // changes class conditionally for the list items
   let dayClass = classNames("day-list__item", {
     "day-list__item--selected": props.selected,
     "day-list__item--full": !props.spots

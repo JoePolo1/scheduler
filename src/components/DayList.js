@@ -7,6 +7,7 @@ export default function DayList(props) {
 
   // Function for handling parsing the days
   const daysParser = function() {
+    console.log("props.days is ", props.days);
       return props.days.map((weekday) => {
 
         // must return either HTML or a COMPONENT. In this case, returns a Component.

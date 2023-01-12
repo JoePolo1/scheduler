@@ -4,6 +4,9 @@ import Header from './Header';
 import Show from './Show';
 import Empty from './Empty';
 
+
+
+// Appointment component declaration
 export default function Appointment(props)  {
 
   // Helper shows the show container or empty container depending on if an interview object exists
@@ -14,6 +17,8 @@ export default function Appointment(props)  {
       return <Empty />;
     };
   };
+
+  console.log("Props.time is ", props.time);
 
   return (
     <article className="appointment">

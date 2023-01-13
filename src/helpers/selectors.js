@@ -33,3 +33,28 @@ export function getAppointmentsForDay(state, day) {
   });
   return result;
 };
+
+// Interview getting helper function
+export function getInterview(state, interview) {
+
+  // Set up return variable to type Object
+  let result = {};
+
+  // Returns null when an interview does not exist
+  if (!interview) {
+    return null;
+  };
+
+  // We need a way to identify which interviewers match on id
+  for (const id in state.interviewers)  {
+    // Loops through id of interviewers to determine the match and then returns object with the interview data
+    if (interview.interviewer === state.interviewers[id].id)  {
+      result = {
+        student: interview.student,
+        interviewer: state.interviewers[id]
+      };
+      return result;
+    }
+  }
+
+}

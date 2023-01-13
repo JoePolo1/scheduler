@@ -3,6 +3,7 @@ import axios from "axios";
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
+import { getAppointmentsForDay } from "helpers/selectors";
 
 
 
@@ -51,28 +52,36 @@ export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    appointments: {}
+    appointments: {},
+    interviewers: {}
   })
 
   // The daily appointments variable set by default to an empty array
-  const dailyAppointments = [];
+  // const dailyAppointments = [];
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
 
   // Set Day function updates the day in state
-const setDay = day => setState({ ...state, day});
-
-// Set days function helps update the days state specifically
-const setDays = (days) => {
-  setState(prev => ({...prev, days}));
-};
+  const setDay = day => setState({ ...state, day });
 
   // Runs a get request to /api/days and updates the days state with the response
   useEffect(() => {
-    const URL =  `/api/days`
-    axios.get(URL).then(response => {
-      console.log("Response is ", response);
-      setDays(response.data)
-      // setDays(response.data);
+    const daysURL = `/api/days`;
+    const appointmentsURL = `/api/appointments`;
+    const interviewersURL = `/api/interviewers`;
+
+    Promise.all([
+      axios.get(daysURL),
+      axios.get(appointmentsURL),
+      axios.get(interviewersURL)
+    ]).then((all) => {
+      console.log("All is = ", all);
+      setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
+      console.log(`State dot days is ${state.days}`);
+      console.log(`State dot appointments is ${state.appointments}`);
+      console.log(`State dot interviewers is ${state.interviewers}`);
     })
+
+
   }, [])
 
 
@@ -101,11 +110,12 @@ const setDays = (days) => {
       </section>
       <section className="schedule">
         {dailyAppointments.map((appointment) => {
+          const interview = getInterview(state, appointment.interview)
           return (
-            <Appointment 
+            <Appointment
               key={appointment.id}
               {...appointment}
-              interview={appointment.interview} />
+              interview={interview} />
           )
         })}
         <Appointment key="last" time="5pm" />

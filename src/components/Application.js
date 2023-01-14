@@ -8,48 +8,10 @@ import { getInterview } from "helpers/selectors";
 
 
 
-// const appointments = {
-//   "1": {
-//     id: 1,
-//     time: "12pm",
-//   },
-//   "2": {
-//     id: 2,
-//     time: "1pm",
-//     interview: {
-//       student: "Lydia Miller-Jones",
-//       interviewer: {
-//         id: 3,
-//         name: "Sylvia Palmer",
-//         avatar: "https://i.imgur.com/LpaY82x.png",
-//       }
-//     }
-//   },
-//   "3": {
-//     id: 3,
-//     time: "2pm",
-//   },
-//   "4": {
-//     id: 4,
-//     time: "3pm",
-//     interview: {
-//       student: "Archie Andrews",
-//       interviewer: {
-//         id: 4,
-//         name: "Cohana Roy",
-//         avatar: "https://i.imgur.com/FK8V841.jpg",
-//       }
-//     }
-//   },
-//   "5": {
-//     id: 5,
-//     time: "4pm",
-//   }
-// };
 
 export default function Application(props) {
-  // const [day, setDay] = useState("Monday");
-  // const [days, setDays] = useState([]);
+
+  // Sets the state to initial object with days, appointments and interviewers
   const [state, setState] = useState({
     day: "Monday",
     days: [],
@@ -57,8 +19,6 @@ export default function Application(props) {
     interviewers: {}
   })
 
-  // The daily appointments variable set by default to an empty array
-  // const dailyAppointments = [];
   const dailyAppointments = getAppointmentsForDay(state, state.day);
 
   // Set Day function updates the day in state
@@ -116,7 +76,8 @@ export default function Application(props) {
             <Appointment
               key={appointment.id}
               {...appointment}
-              interview={interview} />
+              interview={interview}
+              interviewers={[]}/>
           )
         })}
         <Appointment key="last" time="5pm" />

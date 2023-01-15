@@ -32,7 +32,7 @@ export default function Appointment(props) {
         />
       )
       }
-      {mode === CREATE && (<Form interviewers={props.interviewers} onSave={props.onSave} onCancel={props.onCancel} />)}
+      {mode === CREATE && (<Form interviewers={props.interviewers} onSave={props.onSave} onCancel={() => transition(EMPTY)} />)}
     </article>
   );
 };

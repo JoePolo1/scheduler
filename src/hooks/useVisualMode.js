@@ -7,24 +7,17 @@ export default function useVisualMode(initial)  {
   // const [modeState, setModeState] = useState(initialMode);
   const [history, setHistory] = useState([initial]);
 
-  // It returns an object with the mode property
-  // return { 
-  //   mode: modeState }
-
   // Function which transitions the state if a new mode is provided
   function transition(mode, replace = false) {
 
     // Ternary conditional which, if replace is true, keeps the entire history stack minus the most recent and updates the mode.
     // Otherwise, updates the mode to the history stack
     setHistory((prev) => replace ? [...prev.slice(0, -1), mode] : [...prev, mode])
-
   }
 
   // Transitions to previous history stack mode, unless there is none (first page visited in a browser with nothing to go back to)
   function back() {
-
     setHistory((prev) => prev.length > 1 ? prev.slice(0, -1) : prev)
-
   }
 
   // Returns the new modes

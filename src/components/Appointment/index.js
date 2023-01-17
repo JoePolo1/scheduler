@@ -5,6 +5,7 @@ import Show from './Show';
 import Empty from './Empty';
 import Form from './Form';
 import Status from './Status';
+import Confirm from './Confirm';
 import useVisualMode from 'hooks/useVisualMode';
 
 // Mode state constants to use for transitions
@@ -14,12 +15,12 @@ const CREATE = "CREATE";
 const SAVING = "SAVING";
 const CONFIRMING = "CONFIRMING";
 const DELETING = "DELETING";
+const EDIT = "EDIT";
 
 
 
 // Appointment component declaration
 export default function Appointment(props) {
-
   // Custom hook imported which passes in the the SHOW mode if props.interview has a value, if it is empty it passes EMPTY
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -30,17 +31,36 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
-
     // Shows the saving indicator while the request is being handled to update the appointment
     transition(SAVING);
-
-    // debugger;
-
-    // props.bookInterview(props.id, interview);
     props.bookInterview(props.id, interview).then(() => transition(SHOW)).catch((error) => {console.log(error)});
-    // console.log("props.id is", props.id, "interview is ", interview, "student is ", interview.student);
-    // transitions mode to Show the new booked appointment
-    // transition(SHOW);
+  }
+
+  function deletion(student, interviewer) {
+    const interview = {
+      student: student,
+      interviewer
+    };
+    
+    // Shows the confirm deletion page to prevent automatic destructive actions
+    transition(CONFIRMING);
+  }
+
+  function confirmDeletion(student, interviewer) {
+    const interview = {
+      student: student,
+      interviewer
+    };
+
+    // Shows the deleting indicator while the request is being handled to update the appointment
+    transition(DELETING);
+
+    props.cancelInterview(props.id).then(() => transition(EMPTY)).catch((error) => {console.log(error)});
+  }
+
+  // Handles editing of existing appointment
+  const handleEdit = function() {
+    transition(EDIT)
   }
 
 
@@ -49,15 +69,22 @@ export default function Appointment(props) {
       <Header time={props.time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SAVING && <Status message="Saving"/>}
-      {mode === CONFIRMING && <Confirm message="Delete the appointment?"/>}
-      {mode === SHOW && (
-        <Show
-          student={props.interview.student}
-          interviewer={props.interview.interviewer}
-        />
+      {mode === CONFIRMING && <Confirm 
+                                message="Delete the appointment?"
+                                onConfirm={confirmDeletion}
+                                onCancel={() => transition(SHOW)}
+                                />}
+      {mode === DELETING && <Status message="Deleting" />}
+      {mode === SHOW && (<Show
+                            student={props.interview.student}
+                            interviewer={props.interview.interviewer}
+                            onDelete={deletion}
+                            onEdit={handleEdit}
+                            />
       )
       }
       {mode === CREATE && (<Form interviewers={props.interviewers} onSave={save} onCancel={() => transition(EMPTY)} />)}
+      {mode === EDIT && (<Form student={props.interview.student} interviewers={props.interviewers} interviewer={props.interview.interviewer.id} onSave={save} onCancel={() => transition(SHOW)} />)}
     </article>
   );
 };

@@ -6,92 +6,38 @@ import Appointment from "./Appointment";
 import { getAppointmentsForDay } from "helpers/selectors";
 import { getInterviewersForDay } from "helpers/selectors";
 import { getInterview } from "helpers/selectors";
-
-
+import useApplicationData from "hooks/useApplicationData";
 
 
 export default function Application(props) {
 
-  // Sets the state to initial object with days, appointments and interviewers
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    appointments: {},
-    interviewers: {}
-  });
 
-  // Handles the booking of a new interview/saving changes
-  function bookInterview(id, interview) {
-    
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-
-    // Handles the change of appointment booking with the new information and passes inter
-    return axios.put(`/api/appointments/${id}`, {interview})
-    .then(() =>  setState({
-      ...state,
-      appointments
-    }))
-
-  };
-
- // Function to cancel an interview
-function cancelInterview(id) {
-
-  const appointment = {
-    ...state.appointments[id],
-    interview: null
-  };
-
-  const appointments = {
-    ...state.appointments,
-    [id]: appointment
-  };
-
-  return axios.delete(`/api/appointments/${id}`)
-  .then(() =>  setState({
-  ...state,
-  appointments
-}))
+  // REFACTOR 1
+  const {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview
+  } = useApplicationData();
 
 
-}
-
-
-
-  const dailyAppointments = getAppointmentsForDay(state, state.day);
   const dailyInterviewers = getInterviewersForDay(state, state.day);
 
-  // Set Day function updates the day in state
-  const setDay = day => setState({ ...state, day });
-
-  // Runs a get request to /api/days and updates the days state with the response
-  useEffect(() => {
-    const daysURL = `/api/days`;
-    const appointmentsURL = `/api/appointments`;
-    const interviewersURL = `/api/interviewers`;
-
-    Promise.all([
-      axios.get(daysURL),
-      axios.get(appointmentsURL),
-      axios.get(interviewersURL)
-    ]).then((all) => {
-      console.log("All is = ", all);
-      setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
-      console.log(`State dot days is ${state.days}`);
-      console.log(`State dot appointments is ${state.appointments}`);
-      console.log(`State dot interviewers is ${state.interviewers}`);
-    })
-
-
-  }, [])
+  //REFACTOR APPOINTMENTS
+  const appointments = getAppointmentsForDay(state, state.day).map(
+    appointment => {
+      return (
+        <Appointment
+          key={appointment.id}
+          {...appointment}
+          interview={getInterview(state, appointment.interview)}
+          interviewers={dailyInterviewers}
+          bookInterview={bookInterview}
+          cancelInterview={cancelInterview}
+        />
+      )
+    }
+  )
 
 
   return (
@@ -118,19 +64,7 @@ function cancelInterview(id) {
 
       </section>
       <section className="schedule">
-        {dailyAppointments.map((appointment) => {
-          const interview = getInterview(state, appointment.interview)
-          return (
-            <Appointment
-              key={appointment.id}
-              {...appointment}
-              interview={interview}
-              interviewers={dailyInterviewers}
-              bookInterview={bookInterview}
-              cancelInterview={cancelInterview}
-              />
-          )
-        })}
+        {appointments}
         <Appointment key="last" time="5pm" />
       </section>
     </main>

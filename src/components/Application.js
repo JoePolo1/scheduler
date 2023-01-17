@@ -18,7 +18,32 @@ export default function Application(props) {
     days: [],
     appointments: {},
     interviewers: {}
-  })
+  });
+
+  // Handles the booking of a new interview/saving changes
+  function bookInterview(id, interview) {
+    
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    // Handles the change of appointment booking with the new information and passes inter
+    return axios.put(`/api/appointments/${id}`, {interview})
+    .then(() =>  setState({
+      ...state,
+      appointments
+    }))
+
+
+  };
+
+
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const dailyInterviewers = getInterviewersForDay(state, state.day);
@@ -79,7 +104,9 @@ export default function Application(props) {
               key={appointment.id}
               {...appointment}
               interview={interview}
-              interviewers={dailyInterviewers}/>
+              interviewers={dailyInterviewers}
+              bookInterview={bookInterview}
+              />
           )
         })}
         <Appointment key="last" time="5pm" />

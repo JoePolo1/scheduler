@@ -11,8 +11,7 @@ import useApplicationData from "hooks/useApplicationData";
 
 export default function Application(props) {
 
-
-  // REFACTOR 1
+  // REFACTORED
   const {
     state,
     setDay,

@@ -4,9 +4,7 @@ import { useState, useEffect } from "react";
 
 
 // Helper hook for application data loading
-
 export default function useApplicationData() {
-
   // Store all states in a single obj
   const [state, setState] = useState({
     day: "Monday",
@@ -15,27 +13,63 @@ export default function useApplicationData() {
     interviewers: {}
   })
 
+  // Handles updating of remaining spots
+  const updateSpots = function(state, id) {
+    let currentWeekdays = [];
+
+    for (const day of state.days) {
+      let newDayStateWithSpots = day;
+      let currentSpots = 0;
+
+      for (const ID of day.appointments)  {
+        let instance = state.appointments[ID];
+        // Increments a spot if interview does not exist (aka, got deleted)
+        if (instance.interview === null)  {
+          currentSpots++;
+        }
+      }
+      // Sets the current remaining spots to current spots
+      newDayStateWithSpots.spots = currentSpots;
+      
+      // adds the updated amount to the updated days array
+      currentWeekdays.push(newDayStateWithSpots)
+    }
+
+    const newStateFreshSpots = {
+      ...state,
+      days: currentWeekdays
+    };
+
+    return newStateFreshSpots;
+  }
+
 
   // Handles the booking of a new interview/saving changes
   function bookInterview(id, interview) {
-
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
     };
-
     const appointments = {
       ...state.appointments,
       [id]: appointment
     };
 
-    // Handles the change of appointment booking with the new information and passes inter
+    // Handles the change of appointment booking with the new information and passes info
     return axios.put(`/api/appointments/${id}`, { interview })
-      .then(() => setState({
-        ...state,
-        appointments
-      }))
+      .then((response) => {
+        
+        setState((prev) => {
+        const newStatesAppointments = {
+          ...prev,
+          appointments
+        }
 
+        const newStateFreshSpots = updateSpots(newStatesAppointments, id);
+
+        return newStateFreshSpots;
+      })
+    })
   };
 
   // Function to cancel an interview
@@ -52,12 +86,15 @@ export default function useApplicationData() {
     };
 
     return axios.delete(`/api/appointments/${id}`)
-      .then(() => setState({
-        ...state,
-        appointments
+      .then(() => setState((prev) => {
+        const newStatesAppointments = {
+          ...prev,
+          appointments
+        }
+        // updates state with new appointment and spots remaining
+        const newStateFreshSpots = updateSpots(newStatesAppointments, id);
+        return newStateFreshSpots;
       }))
-
-
   }
 
     // Set Day function updates the day in state

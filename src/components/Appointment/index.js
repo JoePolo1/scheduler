@@ -42,27 +42,27 @@ export default function Appointment(props) {
   }
 
   function deletion(student, interviewer) {
-    const interview = {
-      student: student,
-      interviewer
-    };
+    // const interview = {
+    //   student: student,
+    //   interviewer
+    // };
     
     // Shows the confirm deletion page to prevent automatic destructive actions
     transition(CONFIRMING);
   }
 
   function confirmDeletion(student, interviewer) {
-    const interview = {
-      student: student,
-      interviewer
-    };
+    // const interview = {
+    //   student: student,
+    //   interviewer
+    // };
 
     // Shows the deleting indicator while the request is being handled to update the appointment
     transition(DELETING, true);
 
     props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
-      .catch((error) => {transition(ERROR_DELETE)});
+      .catch((error) => {transition(ERROR_DELETE, true)});
   }
 
   // Handles editing of existing appointment
@@ -92,10 +92,10 @@ export default function Appointment(props) {
                             />
       )
       }
-      {mode === CREATE && (<Form interviewers={props.interviewers} onSave={save} onCancel={() => transition(EMPTY)} />)}
-      {mode === EDIT && (<Form student={props.interview.student} interviewers={props.interviewers} interviewer={props.interview.interviewer.id} onSave={save} onCancel={() => transition(SHOW)} />)}
-      {mode === ERROR_SAVE && <Error message="Could not save." onClose={() => transition(CREATE)} />}
-      {mode === ERROR_DELETE && <Error message="Could not delete." onClose={() => transition(SHOW)} />}
+      {mode === CREATE && (<Form interviewers={props.interviewers} onSave={save} onCancel={back} />)}
+      {mode === EDIT && (<Form student={props.interview.student} interviewers={props.interviewers} interviewer={props.interview.interviewer.id} onSave={save} onCancel={back} />)}
+      {mode === ERROR_SAVE && <Error message="Could not save." onClose={back} />}
+      {mode === ERROR_DELETE && <Error message="Could not delete." onClose={back} />}
     </article>
     
   );

@@ -1,6 +1,6 @@
 import axios from "axios";
-import React from "react";
 import { useState, useEffect } from "react";
+// import updateSpots from "../helpers/updateSpots";
 
 
 // Helper hook for application data loading
@@ -13,36 +13,29 @@ export default function useApplicationData() {
     interviewers: {}
   })
 
-  // Handles updating of remaining spots
-  const updateSpots = function(state, id) {
-    let currentWeekdays = [];
-
-    for (const day of state.days) {
-      let newDayStateWithSpots = day;
-      let currentSpots = 0;
-
-      for (const ID of day.appointments)  {
-        let instance = state.appointments[ID];
-        // Increments a spot if interview does not exist (aka, got deleted)
-        if (instance.interview === null)  {
-          currentSpots++;
-        }
+  const updateSpots = function(state, appointments) {
+    // identify the day ion question using the FIND method
+    const dayObj = state.days.find(d => d.name === state.day);
+  
+    // This then counts the NULL appointments to determine how many spots exist in a day. 
+    // It uses ++ to add to the number of spots starting from zero as it loops through.
+    let spots = 0;
+    for (const id of dayObj.appointments) {
+      const appointment = appointments[id];
+      console.log("appointments/id is ", appointments);
+      if (!appointment.interview) {
+        spots++;
       }
-      // Sets the current remaining spots to current spots
-      newDayStateWithSpots.spots = currentSpots;
-      
-      // adds the updated amount to the updated days array
-      currentWeekdays.push(newDayStateWithSpots)
     }
-
-    const newStateFreshSpots = {
-      ...state,
-      days: currentWeekdays
-    };
-
-    return newStateFreshSpots;
-  }
-
+  
+    // adds the new value of spots back to the day object without mutating state directly, by returning 
+    // it via the MAP method (targeting the day in question only using ternary) 
+    // which creates a copy array as opposed to directly changing existing values
+    const day = {...dayObj, spots};
+    const newDays =  state.days.map(d => d.name === state.day ? day : d);
+  
+    return newDays;
+  };
 
   // Handles the booking of a new interview/saving changes
   function bookInterview(id, interview) {
@@ -58,18 +51,20 @@ export default function useApplicationData() {
     // Handles the change of appointment booking with the new information and passes info
     return axios.put(`/api/appointments/${id}`, { interview })
       .then((response) => {
-        
         setState((prev) => {
-        const newStatesAppointments = {
-          ...prev,
-          appointments
-        }
+          const newStatesAppointments = {
+            ...prev,
+            appointments
+          }
 
-        const newStateFreshSpots = updateSpots(newStatesAppointments, id);
+          const newStateFreshSpots = updateSpots(newStatesAppointments, appointments);
 
-        return newStateFreshSpots;
+          return {
+            ...newStatesAppointments,
+            days: newStateFreshSpots
+          }
+        })
       })
-    })
   };
 
   // Function to cancel an interview
@@ -86,38 +81,41 @@ export default function useApplicationData() {
     };
 
     return axios.delete(`/api/appointments/${id}`)
-      .then(() => setState((prev) => {
+    .then((response) => {
+      setState((prev) => {
         const newStatesAppointments = {
           ...prev,
           appointments
         }
-        // updates state with new appointment and spots remaining
-        const newStateFreshSpots = updateSpots(newStatesAppointments, id);
-        return newStateFreshSpots;
-      }))
+
+        const newStateFreshSpots = updateSpots(newStatesAppointments, appointments);
+
+        return {
+          ...newStatesAppointments,
+          days: newStateFreshSpots
+        }
+      })
+    })
   }
 
-    // Set Day function updates the day in state
-    const setDay = day => setState({ ...state, day });
+  // Set Day function updates the day in state
+  const setDay = day => setState({ ...state, day });
 
-    // Runs a get request to /api/days and updates the days state with the response
-    useEffect(() => {
-      const daysURL = `/api/days`;
-      const appointmentsURL = `/api/appointments`;
-      const interviewersURL = `/api/interviewers`;
-  
-      Promise.all([
-        axios.get(daysURL),
-        axios.get(appointmentsURL),
-        axios.get(interviewersURL)
-      ]).then((all) => {
-        console.log("All is = ", all);
-        setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
-        console.log(`State dot days is ${state.days}`);
-        console.log(`State dot appointments is ${state.appointments}`);
-        console.log(`State dot interviewers is ${state.interviewers}`);
-      })
-    }, [])
+  // Runs a get request to /api/days and updates the days state with the response
+  useEffect(() => {
+    const daysURL = `/api/days`;
+    const appointmentsURL = `/api/appointments`;
+    const interviewersURL = `/api/interviewers`;
+
+    Promise.all([
+      axios.get(daysURL),
+      axios.get(appointmentsURL),
+      axios.get(interviewersURL)
+    ]).then((all) => {
+      console.log("All is = ", all);
+      setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
+    })
+  }, [])
 
   return {
     state,

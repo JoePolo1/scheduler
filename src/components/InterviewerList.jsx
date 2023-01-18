@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import InterviewerListItem from './InterviewerListItem';
 import "components/InterviewerList.scss"
 
@@ -26,4 +27,9 @@ export default function InterviewerList(props) {
       <ul className="interviewers__list">{interviewerParser()}</ul>
     </section>
   );
+};
+
+// proptypes testing to ensure interviewers is returned as an array type only and that it is required
+InterviewerList.propTypes = {
+  interviewers: PropTypes.array.isRequired
 };

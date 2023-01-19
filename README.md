@@ -1,3 +1,5 @@
+!["Interview Scheduler Brand Logo"](https://github.com/JoePolo1/scheduler/blob/master/docs/Brand%20Logo.png?raw=true)
+
 # Interview Scheduler
 
 A React application that allows users to book and cancel interviews using the latest tools and techniques. Interview Scheduler combines a concise API with a WebSocket server to build a realtime experience.

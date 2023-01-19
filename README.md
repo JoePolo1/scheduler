@@ -58,7 +58,7 @@ https://user-images.githubusercontent.com/116989045/213353157-a0400830-ae8b-4454
 
 Users may delete an existing appointment.
 
-==NOTE: Deleting an appointment is a destructive method, and is not recoverable unless recreating from step one.==
+***NOTE: Deleting an appointment is a destructive method, and is not recoverable unless recreating from step one.***
 
 To delete an existing appointment, Click on the **Delete** icon which is shaped like a trash can on the bottom-right hand side of the desired appointment. A confirmation notice will populate to prevent accidental deletion. To confirm cancellation, click on the **Confirm** button. The appointment will disappear from that timeslot. See the video below for visual guidance.
 

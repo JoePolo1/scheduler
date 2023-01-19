@@ -42,7 +42,8 @@ npm run storybook
 
 The Interview Scheduler provides users with a quick and simple way to book an interview between Monday and Friday from noon until 5 pm local time. Simply select a weekday in the navigation, then click on the plus **(+)** icon on an empty timeslot. Users enter their name in the text field, select an available interviewer from the photo avatars, and click **Save** to confirm the appointment. Saved appointments have a light blue background with a blue left side bar with the user's name and the interviewer's name, indicating the timeslot is now confirmed.
 
-(VIDEO HERE)
+
+https://user-images.githubusercontent.com/116989045/213353046-5456041a-0e44-4cde-bbe5-a7ebffa220b2.mov
 
 
 ## Editing an Existing Appointment

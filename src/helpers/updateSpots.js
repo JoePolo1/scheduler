@@ -1,7 +1,7 @@
 
 // Helper function to update spots remaining on a single day
 
-const updateSpots = function(state, appointments) {
+const updateSpots = function (state, appointments) {
   // identify the day ion question using the FIND method
   const dayObj = state.days.find(d => d.name === state.day);
 
@@ -19,8 +19,8 @@ const updateSpots = function(state, appointments) {
   // adds the new value of spots back to the day object without mutating state directly, by returning 
   // it via the MAP method (targeting the day in question only using ternary) 
   // which creates a copy array as opposed to directly changing existing values
-  const day = {...dayObj, spots};
-  const newDays =  state.days.map(d => d.name === state.day ? day : d);
+  const day = { ...dayObj, spots };
+  const newDays = state.days.map(d => d.name === state.day ? day : d);
 
   return newDays;
 };

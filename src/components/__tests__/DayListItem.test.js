@@ -1,3 +1,5 @@
+// Day list item testing logic
+
 import React from "react";
 
 import { render, cleanup } from "@testing-library/react";

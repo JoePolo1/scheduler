@@ -3,13 +3,13 @@ import classNames from "classnames";
 import "components/DayListItem.scss";
 
 
-export default function DayListItem(props)  {
+export default function DayListItem(props) {
 
   // Responsible for formatting specific output if 1 or 0 spots remain
-  const formatSpots = function()  {
-    if (props.spots === 1)  {
+  const formatSpots = function () {
+    if (props.spots === 1) {
       return `1 spot remaining`;
-    } else if (props.spots === 0)  {
+    } else if (props.spots === 0) {
       return `no spots remaining`;
     } else {
       return `${props.spots} spots remaining`;
@@ -24,8 +24,8 @@ export default function DayListItem(props)  {
 
   return (
     <li className={dayClass} onClick={() => props.setDay(props.name)} data-testid="day">
-    <h2 className="text--regular" >{props.name}</h2>
-    <h3 className="text--light">{formatSpots()}</h3>
+      <h2 className="text--regular" >{props.name}</h2>
+      <h3 className="text--light">{formatSpots()}</h3>
     </li>
   );
 }

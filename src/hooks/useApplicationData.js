@@ -13,10 +13,10 @@ export default function useApplicationData() {
     interviewers: {}
   })
 
-  const updateSpots = function(state, appointments) {
+  const updateSpots = function (state, appointments) {
     // identify the day ion question using the FIND method
     const dayObj = state.days.find(d => d.name === state.day);
-  
+
     // This then counts the NULL appointments to determine how many spots exist in a day. 
     // It uses ++ to add to the number of spots starting from zero as it loops through.
     let spots = 0;
@@ -27,13 +27,13 @@ export default function useApplicationData() {
         spots++;
       }
     }
-  
+
     // adds the new value of spots back to the day object without mutating state directly, by returning 
     // it via the MAP method (targeting the day in question only using ternary) 
     // which creates a copy array as opposed to directly changing existing values
-    const day = {...dayObj, spots};
-    const newDays =  state.days.map(d => d.name === state.day ? day : d);
-  
+    const day = { ...dayObj, spots };
+    const newDays = state.days.map(d => d.name === state.day ? day : d);
+
     return newDays;
   };
 
@@ -81,21 +81,21 @@ export default function useApplicationData() {
     };
 
     return axios.delete(`/api/appointments/${id}`)
-    .then((response) => {
-      setState((prev) => {
-        const newStatesAppointments = {
-          ...prev,
-          appointments
-        }
+      .then((response) => {
+        setState((prev) => {
+          const newStatesAppointments = {
+            ...prev,
+            appointments
+          }
 
-        const newStateFreshSpots = updateSpots(newStatesAppointments, appointments);
+          const newStateFreshSpots = updateSpots(newStatesAppointments, appointments);
 
-        return {
-          ...newStatesAppointments,
-          days: newStateFreshSpots
-        }
+          return {
+            ...newStatesAppointments,
+            days: newStateFreshSpots
+          }
+        })
       })
-    })
   }
 
   // Set Day function updates the day in state

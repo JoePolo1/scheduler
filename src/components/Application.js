@@ -10,7 +10,7 @@ import useApplicationData from "hooks/useApplicationData";
 
 export default function Application(props) {
 
-  // REFACTORED
+  // Refactor of state for application component
   const {
     state,
     setDay,
@@ -21,7 +21,7 @@ export default function Application(props) {
 
   const dailyInterviewers = getInterviewersForDay(state, state.day);
 
-  //REFACTOR APPOINTMENTS
+  // Appointment rendering
   const appointments = getAppointmentsForDay(state, state.day).map(
     appointment => {
       return (

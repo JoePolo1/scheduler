@@ -10,7 +10,7 @@ export function getAppointmentsForDay(state, day) {
     return result;
   };
 
-    // Loop through state.days to find the day matching the parameter argument
+  // Loop through state.days to find the day matching the parameter argument
   const findDay = state.days.filter(x => x.name === day);
 
   // Returns an empty array when the day is not found
@@ -28,9 +28,9 @@ export function getAppointmentsForDay(state, day) {
   // Loop through appointments to match with ID, push the data into it, then return the array result
   appointmentIdDay.forEach(id => {
     // if (id === appointments[id]) {
-      result.push(appointments[id]);
+    result.push(appointments[id]);
     // }
-    
+
   });
   return result;
 };
@@ -47,9 +47,9 @@ export function getInterview(state, interview) {
   };
 
   // We need a way to identify which interviewers match on id
-  for (const id in state.interviewers)  {
+  for (const id in state.interviewers) {
     // Loops through id of interviewers to determine the match and then returns object with the interview data
-    if (interview.interviewer === state.interviewers[id].id)  {
+    if (interview.interviewer === state.interviewers[id].id) {
       result = {
         student: interview.student,
         interviewer: state.interviewers[id]
@@ -72,7 +72,7 @@ export function getInterviewersForDay(state, day) {
     return result;
   };
 
-    // Loop through state.days to find the day matching the parameter argument
+  // Loop through state.days to find the day matching the parameter argument
   const findDay = state.days.filter(x => x.name === day);
 
   // Returns an empty array when the day is not found
@@ -91,7 +91,7 @@ export function getInterviewersForDay(state, day) {
     if (interviewers[id]) {
       result.push(interviewers[id]);
     }
-    
+
   });
   return result;
 };

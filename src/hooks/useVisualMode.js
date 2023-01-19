@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // Function to use visual mode takes in an initial state
-export default function useVisualMode(initial)  {
+export default function useVisualMode(initial) {
 
   // it sets useState to the initial mode provided/passed down to it
   // const [modeState, setModeState] = useState(initialMode);
@@ -22,8 +22,8 @@ export default function useVisualMode(initial)  {
 
   // Returns the new modes
   return {
-    mode: history[history.length -1],
-    transition, 
+    mode: history[history.length - 1],
+    transition,
     back
   }
 

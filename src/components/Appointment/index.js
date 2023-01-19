@@ -42,20 +42,12 @@ export default function Appointment(props) {
   }
 
   function deletion(student, interviewer) {
-    // const interview = {
-    //   student: student,
-    //   interviewer
-    // };
     
     // Shows the confirm deletion page to prevent automatic destructive actions
     transition(CONFIRMING);
   }
 
   function confirmDeletion(student, interviewer) {
-    // const interview = {
-    //   student: student,
-    //   interviewer
-    // };
 
     // Shows the deleting indicator while the request is being handled to update the appointment
     transition(DELETING, true);

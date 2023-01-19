@@ -50,7 +50,9 @@ https://user-images.githubusercontent.com/116989045/213353046-5456041a-0e44-4cde
 
 Users may edit an existing appointment to change their name or to select another available interviewer. Click on the **Edit** icon on the bottom-right hand side of the desired appointment. Click on a new interviewer and/or type a new name. Complete the edit by clicking **Save**.
 
-(EDIT VIDEO HERE)
+
+https://user-images.githubusercontent.com/116989045/213353157-a0400830-ae8b-4454-a300-6cb962290b97.mov
+
 
 ## Deleting an Appointment
 
@@ -60,7 +62,9 @@ Users may delete an existing appointment.
 
 To delete an existing appointment, Click on the **Delete** icon which is shaped like a trash can on the bottom-right hand side of the desired appointment. A confirmation notice will populate to prevent accidental deletion. To confirm cancellation, click on the **Confirm** button. The appointment will disappear from that timeslot. See the video below for visual guidance.
 
-(DELETE VIDEO HERE)
+
+https://user-images.githubusercontent.com/116989045/213353203-35c37389-7cbf-4f81-94ef-f96da30c1a16.mov
+
 
 
 
